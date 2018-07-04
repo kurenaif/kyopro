@@ -55,5 +55,5 @@ public:
 		res[num]++;
 		return res;
 	}
-}
+};
 

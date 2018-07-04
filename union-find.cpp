@@ -1,49 +1,41 @@
-class union_find {
-private:
-	vector<int> par;
+class UnionFind{
+	vector<int> to;
+	vector<int> cnt;
 	vector<int> rank;
-	vector<int> count;
+
 public:
-	union_find(int N) :par(N), rank(N, 0), count(N, 1) {
-		for (int i = 0; i < N; ++i) {
-			par[i] = i;
-		}
+	UnionFind(int N) {
+		to = vector<int>(N); REP(i, N) to[i] = i;
+		cnt = vector<int>(N, 1);
+		rank = vector<int>(N, 1);
 	}
 
-	int find(int x) {
-		if (par[x] == x) {
-			return x;
-		}
-		else {
-			return par[x] = find(par[x]);
-		}
+	size_t size() {
+		return to.size();
 	}
 
-	void unite(int x, int y) {
-		x = find(x);
-		y = find(y);
-		if (x == y) return;
-
-		if (rank[x] < rank[y]) {
-			count[y] += count[x];
-			par[x] = y;
+	int root(int node) {
+		if (node == to[node]) {
+			return node;
 		}
-		else {
-			count[x] += count[y];
-			par[y] = x;
-			if (rank[x] == rank[y]) rank[x]++;
-		}
+		to[node] = root(to[node]);
+		return to[node];
 	}
 
-	bool same(int x, int y) {
-		return find(x) == find(y);
+	int count(int node) {
+		return cnt[root(node)];
 	}
 
-	int getCount(int x) {
-		return count[find(x)];
+	int same(int a, int b) {
+		return root(a) == root(b);
 	}
 
-	void clean() {
-		par = vector<int>(par.size());
+
+	void unite(int a,int b){
+		if (rank[a] < rank[b]) swap(a, b);
+		int rootb = root(b), roota = root(a);
+		to[rootb] = roota;
+		cnt[roota] += cnt[rootb];
+		if (rank[a] == rank[b]) ++rank[a];
 	}
 };
