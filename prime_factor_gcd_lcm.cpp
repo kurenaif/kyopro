@@ -36,7 +36,6 @@ public:
 
 	std::map<int, int> GetFactor(int num) {
 		std::map<int, int> res;
-		int ma = sqrt(num) + 1;
 		int a = 2;
 		auto it = primes.begin();
 		while (num >= a*a) {
@@ -45,11 +44,11 @@ public:
 				num /= a;
 			}
 			else {
-				if (it == primes.end()) ++a;
-				else {
-					++it;
-					a = *it;
+				++it;
+				if (it == primes.end()) {
+					break;
 				}
+				a = *it;
 			}
 		}
 		res[num]++;
@@ -57,3 +56,17 @@ public:
 	}
 };
 
+
+
+int gcd(int a, int b) {
+  return b != 0 ? gcd(b, a % b) : a;
+}
+int lcm(int a, int b) {
+  return a * b / gcd(a, b);
+}
+// a x + b y = gcd(a, b)
+int extgcd(int a, int b, int &x, int &y) {
+  int g = a; x = 1; y = 0;
+  if (b != 0) g = extgcd(b, a % b, y, x), y -= (a / b) * x;
+  return g;
+}

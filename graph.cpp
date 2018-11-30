@@ -75,3 +75,17 @@ vector<T> bellman_ford(const vector<vector<pair<T, int>>>& G, int start) {
 
 	return dists;
 }
+
+void draw_graph(const vector<vector<int> >& G) {
+	ofstream fout("graph.dot");
+	fout << "strict graph {";
+	REP(i, G.size()) {
+		REP(j, G[i].size()) {
+			fout << i << "--" << G[i][j] << endl;
+		}
+	}
+	fout << "}";
+	fout.close();
+	system("dot -Tpdf graph.dot -o graph.pdf");
+	system("echo hello");
+}

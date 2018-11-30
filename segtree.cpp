@@ -8,11 +8,11 @@ private:
 		if (r <= a || b <= l) return numeric_limits<T>::max();
 
 		if (a <= l & r <= b) return dat[k];
-		else {
-			T vl = query(a, b, k * 2 + 1, l, (l + r) / 2);
-			T vr = query(a, b, k * 2 + 2, (l + r) / 2, r);
-			return min(vl, vr);
-		}
+
+		T vl = query(a, b, k * 2 + 1, l, (l + r) / 2);
+		T vr = query(a, b, k * 2 + 2, (l + r) / 2, r);
+
+		return min(vl, vr);
 	}
 public:
 	segtree(int n_) {

@@ -1,4 +1,7 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <iostream>
+#include <random>
 #include <numeric>
 #include <queue>
 #include <map>
@@ -198,7 +201,14 @@ void solve();
 
 signed main() {
 	SETUP;
-	solve();
+#ifdef _DEBUG
+	while (true) {
+#endif
+		solve();
+#ifdef _DEBUG
+		cout << "-------" << endl;
+	}
+#endif
 #ifdef _DEBUG
 	system("pause");
 #endif
@@ -207,7 +217,114 @@ signed main() {
 
 // template
 
-#define int long long
+#define int ll
+
+class prime {
+private:
+public:
+	std::vector<int> primes;
+	std::vector<bool> isPrime;
+	prime(int num = 0) {
+		if (num == 0) return;
+		isPrime.resize(num + 1);
+		fill(isPrime.begin(), isPrime.end(), true);
+		int ma = sqrt(num) + 1;
+		isPrime[0] = isPrime[1] = false;
+		int cnt = 0;
+		for (int i = 2; i <= ma; ++i) if (isPrime[i]) {
+			for (int j = 2; i*j <= num; ++j) {
+				isPrime[i*j] = false;
+				cnt++;
+			}
+		}
+		primes.reserve(cnt);
+		for (int i = 0; i < isPrime.size(); ++i) if (isPrime[i]) {
+			primes.push_back(i);
+		}
+	}
+
+	bool IsPrime(int num) {
+		if (num < isPrime.size()) return isPrime[num];
+		for (auto p : primes) {
+			if (num%p == 0) return false;
+		}
+		int ma = sqrt(num) + 1;
+		for (int i = primes.back(); i <= ma; i += 2) {
+			if (num%i == 0) return false;
+		}
+		return true;
+	}
+
+	std::map<int, int> GetFactor(int num) {
+		std::map<int, int> res;
+		int a = 2;
+		auto it = primes.begin();
+		while (num >= a * a) {
+			if (num%a == 0) {
+				res[a]++;
+				num /= a;
+			}
+			else {
+				++it;
+				if (it == primes.end()) {
+					break;
+				}
+				a = *it;
+			}
+		}
+		res[num]++;
+		return res;
+	}
+};
 
 void solve() {
+	int N, M, K; cin >> N >> M >> K;
+	prime primes(sqrt(1e9) + 1);
+	auto nfactors = primes.GetFactor(N);
+	auto mfactors = primes.GetFactor(M);
+	auto kfactors = primes.GetFactor(K);
+
+	for (auto &a : kfactors) {
+		int rest = a.second;
+		auto& nf = nfactors[a.first];
+		auto& mf = mfactors[a.first];
+		while (rest > 0 and nf > 0) {
+			nf--;
+			--rest;
+		}
+		while (rest > 0 and mf > 0) {
+			mf--;
+			--rest;
+		}
+		if (rest > 0) {
+			cout << "No" << endl;
+			return;
+		}
+	}
+
+	int x = 1;
+	int y = 1;
+
+	for (auto &a : nfactors) {
+		REP(i, a.second) {
+			x *= a.first;
+		}
+	}
+	for (auto &a : mfactors) {
+		REP(i, a.second) {
+			y *= a.first;
+		}
+	}
+
+	if (x * 2 < N) x *= 2;
+	else if (y * 2 < N) y *= 2;
+	else {
+		cout << "NO" << endl;
+		return;
+	}
+
+	cout << "YES" << endl;
+	cout << "0 0" << endl;
+	cout << x << " 0" << endl;
+	cout << "0 " << y << endl;
 }
