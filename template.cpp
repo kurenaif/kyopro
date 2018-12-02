@@ -1,4 +1,7 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <iostream>
+#include <random>
 #include <numeric>
 #include <queue>
 #include <map>
@@ -32,7 +35,7 @@ using namespace std;
 #define RREP(i,n) for (int i=(n)-1;i>=0;i--)
 #define inf 0x3f3f3f3f3f3f3f3f
 #define ALL(a) (a).begin(),(a).end()
-#define DEBUG(x) cout<<#x<<": "<<x<<endl
+#define DEBUG(x) // cerr<<#x<<": "<<x<<endl
 #define ll long long
 #define ull unsigned long long
 using pii = pair<ll, ll>;
@@ -183,11 +186,12 @@ bool inside(T left, T val, T right) {
 	return left <= val and val < right;
 }
 
-int bitCount(int num) {
-	int res = 0;
+template<class T>
+T bitCount(T num) {
+	T res = 0;
 	while (num > 0) {
+		if (num & 1) ++res;
 		num >>= 1;
-		++res;
 	}
 	return res;
 }
@@ -198,16 +202,23 @@ void solve();
 
 signed main() {
 	SETUP;
-	solve();
+#ifdef _DEBUG
+	while (true) {
+#endif
+		solve();
+#ifdef _DEBUG
+		cout << "-------" << endl;
+	}
+#endif
 #ifdef _DEBUG
 	system("pause");
 #endif
 	return 0;
 }
 
-// template
+#define int ll
 
-#define int long long
+// template
 
 void solve() {
 }

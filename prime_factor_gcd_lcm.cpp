@@ -64,9 +64,21 @@ int gcd(int a, int b) {
 int lcm(int a, int b) {
   return a * b / gcd(a, b);
 }
+
 // a x + b y = gcd(a, b)
 int extgcd(int a, int b, int &x, int &y) {
   int g = a; x = 1; y = 0;
   if (b != 0) g = extgcd(b, a % b, y, x), y -= (a / b) * x;
   return g;
+}
+
+inline long long mod(long long a, long long m) {
+    return (a % m + m) % m;
+}
+
+// condition: gcd(a,m) == 1
+long long modinv(long long a, long long m) {
+    long long x, y;
+    extgcd(a, m, x, y);
+    return mod(x, m);
 }
